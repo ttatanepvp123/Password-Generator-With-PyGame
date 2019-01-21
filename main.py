@@ -1,11 +1,12 @@
 import pygame
 import math
+import shutil
 
 maxToGenerate = 94
 screenSize = int(math.sqrt(maxToGenerate)*10)
 
-PasswordSize = int(input("Password Size : "))
-Password = ""
+passwordSize = int(input("Password Size : "))
+password = ""
 
 pygame.init()
 
@@ -19,10 +20,17 @@ while not finish:
         if event.type == pygame.MOUSEMOTION:
             tmp = pygame.mouse.get_pos()
             tmp = int(tmp[0]/10)*int(tmp[1]/10)
+            percentage = len(password)*100/passwordSize
+            terminalSize = shutil.get_terminal_size()
+            loadBarComponent1 = "■"*int((terminalSize.columns-2)*percentage/100)
+            loadBarComponent2 = " "*(terminalSize.columns-2-len(loadBarComponent1))
+            print(f"[{loadBarComponent1}{loadBarComponent2}]",end="\r")
             if i%10 == 0:
-                Password += chr(33+tmp-1)
-            if len(Password) >= PasswordSize:
+                password += chr(33+tmp-1)
+            if len(password) >= passwordSize:
                 finish = True
             i += 1
 
-print(Password)
+terminalSize = shutil.get_terminal_size()
+print(" "*terminalSize.columns, end="\r")
+print(password)
